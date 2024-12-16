@@ -1,8 +1,8 @@
 import express from "express";
 import swaggerUi from "swagger-ui-express";
 import dotenv from "dotenv";
-import authRoutes from "./api/auth";
 import swaggerDoc from "./swagger/swagger-output.json";
+import { authRoutes } from "./api";
 
 dotenv.config();
 

@@ -9,4 +9,4 @@ authRoutes.post("/register", (req, res) => {
   res.status(200).json({ token: "fake-jwt-token" });
 });
 
-export default authRoutes;
+export { authRoutes };
