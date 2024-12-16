@@ -1,5 +1,5 @@
 {
-  "name": "my-turborepo",
+  "name": "omni-internship-program",
   "private": true,
   "scripts": {
     "build": "turbo build",
