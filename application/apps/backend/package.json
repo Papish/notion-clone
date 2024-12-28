@@ -4,7 +4,7 @@
   "description": "Backend application built with express and postgresql",
   "main": "server.ts",
   "scripts": {
-    "dev": "nodemon --watch src --exec ts-node src/server.ts",
+    "dev": "nodemon -L --watch src --exec ts-node src/server.ts",
     "swagger": "node ./src/swagger/swagger.js"
   },
   "author": "",

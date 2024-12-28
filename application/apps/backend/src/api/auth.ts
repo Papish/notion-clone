@@ -1,7 +1,7 @@
 import express from "express";
 const authRoutes = express.Router();
 
-authRoutes.post("/login", (req, res) => {
+authRoutes.get("/login", (req, res) => {
   res.status(200).json({ token: "fake-jwt-token" });
 });
 
