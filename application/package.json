@@ -1,5 +1,5 @@
 {
-  "name": "omni-internship-program",
+  "name": "developer-workflow",
   "private": true,
   "scripts": {
     "build": "turbo build",

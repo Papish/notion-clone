@@ -2,7 +2,7 @@ const swaggerAutogen = require("swagger-autogen")();
 
 const doc = {
   info: {
-    title: "Omni API",
+    title: "Developer workflow API",
     description: "API Documentation",
   },
   host: "localhost:3000",

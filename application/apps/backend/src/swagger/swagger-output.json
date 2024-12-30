@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Omni API",
+    "title": "Developer workflow API",
     "description": "API Documentation",
     "version": "1.0.0"
   },
