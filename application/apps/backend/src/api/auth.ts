@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 const authRoutes = express.Router();
 
-const JWT_SECRET = process.env.PORT || "";
+const JWT_SECRET = "jwt-secret-key";
 
 authRoutes.get("/login", async (req, res) => {
   const users = await db.user.findMany();
@@ -36,11 +36,12 @@ authRoutes.post(
       });
 
       const access_token = jwt.sign({ userId: user.id }, JWT_SECRET, {
-        expiresIn: "1xxxxh",
+        expiresIn: "1h",
       });
 
       res.status(200).json({ message: "Login successful", token: access_token });
     } catch (err) {
+      console.log(err)
       next(err);
     }
   },
