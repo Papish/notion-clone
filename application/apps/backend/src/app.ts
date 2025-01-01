@@ -4,8 +4,9 @@ import helmet, { noSniff } from "helmet";
 import dotenv from "dotenv";
 import cors from "cors";
 import { rateLimit } from "express-rate-limit";
-import { authRoutes } from "./api";
 import swaggerDoc from "./swagger/swagger-output.json";
+import apiRoutes from "./controllers/routes";
+import { errorHandler } from "./middleware/errorHandler";
 
 const PORT = process.env.PORT || 3000;
 
@@ -41,18 +42,9 @@ app.use(
 app.disable("x-powered-by");
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
-app.use("/api/auth", authRoutes);
+app.use("/api", apiRoutes);
 
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  const statusCode = err.statusCode || 500;
-
-  process.env.NODE_ENV === "development" ? console.error(err.stack) : "";
-
-  res.status(statusCode).json({
-    statusCode,
-    message: "Internal Server Error",
-  });
-});
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
