@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { AuthVerificationError } from "../utils/authError";
+import { ZodError } from "zod";
+import { AuthVerificationError } from "../utils/appError";
 
 export const errorHandler = (
   err: any,
@@ -7,19 +8,33 @@ export const errorHandler = (
   res: Response,
   next: NextFunction,
 ) => {
-  const statusCode = err.statusCode || 500;
-
   if (err instanceof AuthVerificationError) {
-    res.status(statusCode).json({
-      statusCode,
-      message: "401, user unauthorized",
+    res.status(401).json({
+      statusCode: 401,
+      message: err.message,
+      errors: [],
     });
 
     return;
   }
 
+  if (err instanceof ZodError) {
+    res.status(400).json({
+      statusCode: 400,
+      message: "400, Bad Request",
+      errors: err.errors.map((err) => ({
+        field: err.path.join("."),
+        message: err.message,
+      })),
+    });
+
+    return;
+  }
+
+  const statusCode = err.statusCode || 500;
   res.status(statusCode).json({
     statusCode,
     message: "Internal Server Error",
+    errors: [],
   });
 };

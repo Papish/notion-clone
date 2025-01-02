@@ -1,19 +1,28 @@
 import express, { NextFunction, Request, Response } from "express";
 import swaggerUi from "swagger-ui-express";
-import helmet, { noSniff } from "helmet";
+import helmet from "helmet";
 import dotenv from "dotenv";
 import cors from "cors";
 import { rateLimit } from "express-rate-limit";
-import swaggerDoc from "./swagger/swagger-output.json";
+import cookirParser from "cookie-parser";
 import apiRoutes from "./controllers/routes";
 import { errorHandler } from "./middleware/errorHandler";
+import swaggerDoc from "./swagger/swagger-output.json";
 
 const PORT = process.env.PORT || 3000;
 
 dotenv.config();
 
 const app = express();
-app.use(cors());
+
+app.use(
+  cors({
+    credentials: true,
+    origin: "",
+  }),
+);
+
+app.use(cookirParser());
 app.use(express.json());
 
 const limiter = rateLimit({
