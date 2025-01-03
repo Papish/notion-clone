@@ -75,9 +75,32 @@ export const register: RequestHandler = async (req, res, next) => {
 			name,
 		});
 
+		const access_token = createJwtToken(user);
+
+		res.cookie(AUTH_COOKIE, access_token, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			sameSite: "strict",
+			maxAge: 3600000,
+		});
+
 		res.status(200).json({
 			message: "User registered",
 		});
+	} catch (err) {
+		next(err);
+	}
+};
+
+export const logout: RequestHandler = (req, res, next) => {
+	try {
+		res.clearCookie(AUTH_COOKIE, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			sameSite: "strict",
+		});
+
+		res.status(200).json({ message: "Logged out successfully" });
 	} catch (err) {
 		next(err);
 	}

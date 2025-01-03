@@ -8,6 +8,7 @@ apiRoutes.post("/auth/login", AuthController.login);
 apiRoutes.post("/auth/register", AuthController.register);
 
 // Protected
+apiRoutes.post("/auth/logout", authenticate, AuthController.logout);
 apiRoutes.get("/user/profile", authenticate, ProfileController.profile);
 
 export default apiRoutes;

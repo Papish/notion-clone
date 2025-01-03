@@ -21,7 +21,7 @@ export const createJwtToken = (user: User) => {
 };
 
 interface TokenPayload extends JwtPayload {
-	userId: number;
+	userId?: number;
 }
 
 export const verifyJwtToken = (token: string) => {

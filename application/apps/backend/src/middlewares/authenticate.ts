@@ -13,7 +13,7 @@ export const authenticate: RequestHandler = async (req, res, next) => {
 		const decodedToken = verifyJwtToken(token);
 
 		// @ts-ignore
-		req.userId = decodedToken.userId;
+		req.user = decodedToken.userId;
 		next();
 	} catch (err) {
 		next(err);
