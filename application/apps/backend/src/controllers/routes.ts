@@ -8,6 +8,7 @@ const apiRoutes = Router();
 apiRoutes.post("/auth/login", authController.login);
 apiRoutes.post("/auth/register", authController.register);
 
+// Protected
 apiRoutes.get("/user/profile", authenticate, profileController.profile);
 
 export default apiRoutes;

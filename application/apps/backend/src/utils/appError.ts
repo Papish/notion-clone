@@ -2,7 +2,7 @@
 export class AuthVerificationError extends Error {
   constructor(
     public statusCode: number = 401,
-    public message: string = "401, user unauthorized",
+    public message: string = "401, user authentication error",
   ) {
     super(message);
   }
