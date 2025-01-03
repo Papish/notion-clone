@@ -1,9 +1,9 @@
 import { RequestHandler } from "express";
 import bcrypt from "bcryptjs";
-import { createJwtToken } from "../utils/jwt";
 import z from "zod";
-import { userService } from "../services/user.service";
-import { AUTH_ACCESS_TOKEN } from "../constant";
+import { createJwtToken } from "../utils";
+import { UserService } from "../services";
+import { AUTH_COOKIE } from "../constants";
 
 const loginRequestSchema = z.object({
   email: z.string().email(),
@@ -20,13 +20,11 @@ export const login: RequestHandler = async (req, res, next) => {
   try {
     const validData = loginRequestSchema.parse(req.body);
 
-    const user = await userService.findUserByEmail(validData.email);
+    const user = await UserService.findUserByEmail(validData.email);
 
     if (!user) {
       res.status(404).json({
-        statusCode: 404,
         message: "The email provided is not registered yet",
-        errors: [],
       });
       return;
     }
@@ -38,16 +36,14 @@ export const login: RequestHandler = async (req, res, next) => {
 
     if (!isPasswordValid) {
       res.status(401).json({
-        statusCode: 401,
         message: "Ther user credentials are invalid.",
-        errors: [],
       });
       return;
     }
 
     const access_token = createJwtToken(user);
 
-    res.cookie(AUTH_ACCESS_TOKEN, access_token, {
+    res.cookie(AUTH_COOKIE, access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
@@ -64,7 +60,7 @@ export const register: RequestHandler = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
 
-    const existingUser = await userService.findUserByEmail(email);
+    const existingUser = await UserService.findUserByEmail(email);
 
     if (existingUser) {
       res.status(409).json({ message: "Email is already taken" });
@@ -73,7 +69,7 @@ export const register: RequestHandler = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await userService.createUser({
+    const user = await UserService.createUser({
       email,
       password: hashedPassword,
       name,

@@ -1,29 +1,27 @@
-import db from "../config/database";
+import db from "../configs/database";
 
-export const userService = {
-  createUser: ({
-    email,
-    password,
-    name,
-  }: {
-    email: string;
-    password: string;
-    name: string;
-  }) => {
-    return db.user.create({
-      data: {
-        email,
-        password,
-        name,
-      },
-    });
-  },
+export const createUser = ({
+  email,
+  password,
+  name,
+}: {
+  email: string;
+  password: string;
+  name: string;
+}) => {
+  return db.user.create({
+    data: {
+      email,
+      password,
+      name,
+    },
+  });
+};
 
-  findUserByEmail: (email: string) => {
-    return db.user.findUnique({ where: { email } });
-  },
+export const findUserByEmail = (email: string) => {
+  return db.user.findUnique({ where: { email } });
+};
 
-  findUserById: (id: number) => {
-    return db.user.findUnique({ where: { id } });
-  },
+export const findUserById = (id: number) => {
+  return db.user.findUnique({ where: { id } });
 };

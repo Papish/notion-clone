@@ -5,9 +5,9 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { rateLimit } from "express-rate-limit";
 import cookirParser from "cookie-parser";
-import apiRoutes from "./controllers/routes";
-import { errorHandler } from "./middleware/errorHandler";
-import swaggerDoc from "./swagger/swagger-output.json";
+import apiRoutes from "./routes";
+import { errorHandler } from "./middlewares/errorHandler";
+import swaggerDoc from "./configs/swagger/swagger-output.json";
 
 const PORT = process.env.PORT || 3000;
 

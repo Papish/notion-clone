@@ -1,9 +1,9 @@
 import { RequestHandler } from "express";
-import { AUTH_ACCESS_TOKEN } from "../constant";
-import { verifyJwtToken } from "../utils/jwt";
+import { AUTH_COOKIE } from "../constants";
+import { verifyJwtToken } from "../utils";
 
 export const authenticate: RequestHandler = async (req, res, next) => {
-  const token = req.cookies[AUTH_ACCESS_TOKEN];
+  const token = req.cookies[AUTH_COOKIE];
 
   if (!token) {
     res.status(401).json({ message: "token not found" });
