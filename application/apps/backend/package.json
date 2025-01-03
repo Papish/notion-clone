@@ -5,7 +5,8 @@
   "main": "server.ts",
   "scripts": {
     "dev": "nodemon -L --watch src --exec ts-node src/app.ts",
-    "swagger": "node ./src/swagger/swagger.js"
+    "swagger": "node ./src/swagger/swagger.js",
+    "format": "prettier --write src/**/*.{js,ts,json,css,scss,md}"
   },
   "author": "",
   "license": "ISC",
