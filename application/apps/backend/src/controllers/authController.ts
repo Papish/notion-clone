@@ -77,7 +77,6 @@ export const register: RequestHandler = async (req, res, next) => {
 
     res.status(200).json({ message: "User registered" });
   } catch (err) {
-    console.log(err);
     next(err);
   }
 };
