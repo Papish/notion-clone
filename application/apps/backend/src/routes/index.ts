@@ -4,8 +4,6 @@ import { AuthController, ProfileController } from "../controllers";
 
 const apiRoutes = Router();
 
-apiRoutes.use("/auth");
-
 apiRoutes.post("/auth/login", AuthController.login);
 apiRoutes.post("/auth/register", AuthController.register);
 

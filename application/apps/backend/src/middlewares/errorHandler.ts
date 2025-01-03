@@ -1,12 +1,16 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
 import { AuthVerificationError } from "../utils/appError";
 
-export const errorHandler = (err: any, _: Request, res: Response) => {
+export const errorHandler = (
+  err: any,
+  _: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   if (err instanceof AuthVerificationError) {
     res.status(401).json({
       message: err.message,
-      errors: [],
     });
 
     return;
@@ -26,6 +30,5 @@ export const errorHandler = (err: any, _: Request, res: Response) => {
 
   res.status(500).json({
     message: err.message || "Internal Server Error",
-    errors: [],
   });
 };
