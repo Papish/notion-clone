@@ -1,6 +1,14 @@
 import db from "../configs/database";
 
-export const createUser = ({ email, password, name }: { email: string; password: string; name: string }) => {
+export const createUser = ({
+	email,
+	password,
+	name,
+}: {
+	email: string;
+	password: string;
+	name: string;
+}) => {
 	return db.user.create({
 		data: {
 			email,

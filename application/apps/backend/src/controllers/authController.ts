@@ -11,7 +11,8 @@ const loginRequestSchema = z.object({
 		.string()
 		.min(6, "Password must be at least 6 characters")
 		.regex(/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).+$/, {
-			message: "Password must contain at least one uppercase letter, one number, and one special character.",
+			message:
+				"Password must contain at least one uppercase letter, one number, and one special character.",
 		}),
 });
 
@@ -28,7 +29,10 @@ export const login: RequestHandler = async (req, res, next) => {
 			return;
 		}
 
-		const isPasswordValid = await bcrypt.compare(validData.password, user.password);
+		const isPasswordValid = await bcrypt.compare(
+			validData.password,
+			user.password,
+		);
 
 		if (!isPasswordValid) {
 			res.status(401).json({
