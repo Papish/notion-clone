@@ -1,5 +1,7 @@
 export type Node = {
+  id: string;
   element: string;
   content: string;
-  children: Node[];
+  parentId: string | null;
+  children?: Node[]
 };

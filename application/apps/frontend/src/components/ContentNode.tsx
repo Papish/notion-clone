@@ -3,6 +3,7 @@ import { Node } from "../types/node";
 
 type Props = {
   node: Node;
+  onUpdate: (node: Node) => void;
 };
 
 const DynamicElement = ({
@@ -15,22 +16,26 @@ const DynamicElement = ({
   return React.createElement(element, { className: "content-node" }, children);
 };
 
-const ContentNode = (props: Props) => {
-  const [htmlContent, setHtmlContent] = useState(props.node.content);
+const ContentNode = ({ node, onUpdate }: Props) => {
+  const [htmlContent, setHtmlContent] = useState(node.content);
 
   const handleInput = (e: React.FormEvent) => {
     const target = e.target as HTMLElement;
     setHtmlContent(target.innerHTML);
+    onUpdate({
+      ...node,
+      content: target.innerHTML,
+    });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
-    if (e.key === 'Enter') {
-        e.preventDefault();
+    if (e.key === "Enter") {
+      e.preventDefault();
     }
   };
 
   return (
-    <DynamicElement element={props.node.element}>
+    <DynamicElement element={node.element}>
       <div
         contentEditable
         suppressContentEditableWarning
@@ -39,15 +44,15 @@ const ContentNode = (props: Props) => {
         onBlur={handleInput}
         onKeyDown={handleKeyDown}
       ></div>
-      {props.node.children && props.node.children.length > 0
-        ? props.node.children.map((node, i) => (
+      {node.children && node.children.length > 0
+        ? node.children.map((node, i) => (
             <div
               key={i}
               style={{
                 marginLeft: "20px",
               }}
             >
-              <ContentNode node={node} />
+              <ContentNode node={node} onUpdate={onUpdate} />
             </div>
           ))
         : null}
