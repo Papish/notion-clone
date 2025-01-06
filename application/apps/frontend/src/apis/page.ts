@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
-import { Node } from "../types/node";
+import { NodeElement } from "../types/node";
 
 const parentId = uuidv4();
 
-const data: Node[] = [
+const data: NodeElement[] = [
   {
     id: parentId,
     element: "div",
@@ -18,9 +18,9 @@ const data: Node[] = [
   },
 ];
 
-export const getPageContent = (): Promise<Node[]> => {
+export const getPageContent = (): Promise<NodeElement[]> => {
   return new Promise((resolve) => {
-    const nodes: Node[] = [];
+    const nodes: NodeElement[] = [];
 
     data.forEach((node) => {
       if (node.parentId) {
@@ -38,7 +38,7 @@ export const getPageContent = (): Promise<Node[]> => {
   });
 };
 
-export const updatePageContent = (node: Node) => {
+export const updatePageContent = (node: NodeElement) => {
   return new Promise((resolve) => {
     const i = data.findIndex((n) => n.id === node.id);
     if (i !== -1) {

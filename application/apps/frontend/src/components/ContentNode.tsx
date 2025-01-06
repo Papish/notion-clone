@@ -1,31 +1,35 @@
 import React, { useState } from "react";
-import { Node } from "../types/node";
+import { NodeElement } from "../types/node";
 
 type Props = {
-  node: Node;
-  onUpdate: (node: Node) => void;
+  node: NodeElement;
 };
 
 const DynamicElement = ({
   element = "div",
   children,
+  id = "",
 }: {
   element: string;
   children: React.ReactNode[];
+  id: string;
 }) => {
-  return React.createElement(element, { className: "content-node" }, children);
+  return React.createElement(
+    element,
+    {
+      className: "content-node",
+      "data-block-id": id,
+    },
+    children
+  );
 };
 
-const ContentNode = ({ node, onUpdate }: Props) => {
+const ContentNode = ({ node }: Props) => {
   const [htmlContent, setHtmlContent] = useState(node.content);
 
   const handleInput = (e: React.FormEvent) => {
     const target = e.target as HTMLElement;
     setHtmlContent(target.innerHTML);
-    onUpdate({
-      ...node,
-      content: target.innerHTML,
-    });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
@@ -35,7 +39,7 @@ const ContentNode = ({ node, onUpdate }: Props) => {
   };
 
   return (
-    <DynamicElement element={node.element}>
+    <DynamicElement element={node.element} id={node.id}>
       <div
         contentEditable
         suppressContentEditableWarning
@@ -45,14 +49,14 @@ const ContentNode = ({ node, onUpdate }: Props) => {
         onKeyDown={handleKeyDown}
       ></div>
       {node.children && node.children.length > 0
-        ? node.children.map((node, i) => (
+        ? node.children.map((node) => (
             <div
-              key={i}
+              key={node.id}
               style={{
                 marginLeft: "20px",
               }}
             >
-              <ContentNode node={node} onUpdate={onUpdate} />
+              <ContentNode node={node} />
             </div>
           ))
         : null}
