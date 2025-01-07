@@ -9,14 +9,14 @@ const data: NodeElement[] = [
     element: "div",
     content: "some content",
     parentId: null,
-    children: [],
+    content: [],
   },
   {
     id: uuidv4(),
     element: "h1",
     content: "nested content",
     parentId: parentId,
-    children: [],
+    content: [],
   },
 ];
 

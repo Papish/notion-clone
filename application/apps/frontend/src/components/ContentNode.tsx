@@ -1,45 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
-import { NodeElement } from "../types/node";
-
-const DynamicElement = ({
-  element = "div",
-  children,
-  id = "",
-}: {
-  element: string;
-  children: React.ReactNode[];
-  id: string;
-}) => {
-  return React.createElement(
-    element,
-    {
-      className: "content-node",
-      "data-block-id": id,
-    },
-    children
-  );
-};
+import React, { useEffect, useRef } from "react";
+import useDataStore from "../store/dataStore";
+import { debounce } from "lodash";
 
 interface Props {
-  node: NodeElement;
-  addNextNode: (parent: NodeElement["parentId"]) => void;
+  node: string;
 }
 
-const ContentNode = ({ node, addNextNode }: Props) => {
-  const [htmlContent, setHtmlContent] = useState(node.content);
-
-  const handleInput = (e: React.FormEvent) => {
-    const target = e.target as HTMLElement;
-    setHtmlContent(target.innerHTML);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      addNextNode(node.parentId);
-    }
-  };
-
+const ContentNode = ({ node }: Props) => {
+  const data = useDataStore((state) => state.nodes.find((n) => n.id === node));
+  const { addNewNode, updateNode } = useDataStore();
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -48,30 +17,46 @@ const ContentNode = ({ node, addNextNode }: Props) => {
     }
   }, []);
 
+  if (!data) return null;
+
+  const handleInput = debounce((e: React.FormEvent) => {
+    const target = e.target as HTMLElement;
+    // updateNode(data, target.innerHTML);
+  }, 500);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      e.stopPropagation();
+      addNewNode();
+    }
+  };
+
   return (
-    <DynamicElement element={node.element} id={node.id}>
+    <div>
       <div
         ref={ref}
+        tabIndex={0}
         contentEditable
         suppressContentEditableWarning
-        className="content-node-warpper"
-        dangerouslySetInnerHTML={{ __html: htmlContent }}
-        onBlur={handleInput}
+        className="content-node-warpper content"
+        dangerouslySetInnerHTML={{ __html: data.content }}
+        onInput={handleInput}
         onKeyDown={handleKeyDown}
-      ></div>
-      {node.children && node.children.length > 0
-        ? node.children.map((node) => (
+      ></div>{" "}
+      {/* {data.children && data.children.length > 0
+        ? data.children.map((n) => (
             <div
-              key={node.id}
+              key={n}
               style={{
                 marginLeft: "20px",
               }}
             >
-              <ContentNode node={node} addNextNode={addNextNode} />
+              <ContentNode node={n} />
             </div>
           ))
-        : null}
-    </DynamicElement>
+        : null} */}
+    </div>
   );
 };
 
