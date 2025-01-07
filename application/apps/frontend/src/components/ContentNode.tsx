@@ -1,9 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NodeElement } from "../types/node";
-
-type Props = {
-  node: NodeElement;
-};
 
 const DynamicElement = ({
   element = "div",
@@ -24,7 +20,12 @@ const DynamicElement = ({
   );
 };
 
-const ContentNode = ({ node }: Props) => {
+interface Props {
+  node: NodeElement;
+  addNextNode: (parent: NodeElement["parentId"]) => void;
+}
+
+const ContentNode = ({ node, addNextNode }: Props) => {
   const [htmlContent, setHtmlContent] = useState(node.content);
 
   const handleInput = (e: React.FormEvent) => {
@@ -35,12 +36,22 @@ const ContentNode = ({ node }: Props) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
+      addNextNode(node.parentId);
     }
   };
+
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.focus();
+    }
+  }, []);
 
   return (
     <DynamicElement element={node.element} id={node.id}>
       <div
+        ref={ref}
         contentEditable
         suppressContentEditableWarning
         className="content-node-warpper"
@@ -56,7 +67,7 @@ const ContentNode = ({ node }: Props) => {
                 marginLeft: "20px",
               }}
             >
-              <ContentNode node={node} />
+              <ContentNode node={node} addNextNode={addNextNode} />
             </div>
           ))
         : null}
