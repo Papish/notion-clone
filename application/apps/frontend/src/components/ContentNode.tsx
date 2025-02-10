@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { Node } from "../types/node";
 
 type Props = {
   node: Node;
-  onUpdate: (node: Node) => void;
+  onAdd: (node: Node) => void;
 };
 
 const DynamicElement = ({
@@ -16,21 +16,11 @@ const DynamicElement = ({
   return React.createElement(element, { className: "content-node" }, children);
 };
 
-const ContentNode = ({ node, onUpdate }: Props) => {
-  const [htmlContent, setHtmlContent] = useState(node.content);
-
-  const handleInput = (e: React.FormEvent) => {
-    const target = e.target as HTMLElement;
-    setHtmlContent(target.innerHTML);
-    onUpdate({
-      ...node,
-      content: target.innerHTML,
-    });
-  };
-
+const ContentNode = ({ node, onAdd }: Props) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
+      onAdd(node);
     }
   };
 
@@ -40,8 +30,7 @@ const ContentNode = ({ node, onUpdate }: Props) => {
         contentEditable
         suppressContentEditableWarning
         className="content-node-warpper"
-        dangerouslySetInnerHTML={{ __html: htmlContent }}
-        onBlur={handleInput}
+        dangerouslySetInnerHTML={{ __html: node.content }}
         onKeyDown={handleKeyDown}
       ></div>
       {node.children && node.children.length > 0
@@ -52,7 +41,7 @@ const ContentNode = ({ node, onUpdate }: Props) => {
                 marginLeft: "20px",
               }}
             >
-              <ContentNode node={node} onUpdate={onUpdate} />
+              <ContentNode node={node} onAdd={onAdd} />
             </div>
           ))
         : null}
