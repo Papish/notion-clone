@@ -1,7 +1,7 @@
 {
   "name": "express-app",
   "version": "1.0.0",
-  "description": "Backend application built with express and postgresql",
+  "description": "Backend application built with express",
   "main": "server.ts",
   "scripts": {
     "dev": "nodemon -L --watch src --exec ts-node src/app.ts",
