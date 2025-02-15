@@ -31,5 +31,12 @@ export const findUserById = (id: number) => {
     where: {
       id,
     },
+    select: {
+      email: true,
+      name: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true,
+    },
   });
 };

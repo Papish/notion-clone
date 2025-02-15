@@ -12,6 +12,7 @@
   },
   "include": [
     "src",
-    "src/app.ts"
+    "src/app.ts",
+    "prisma/seeds"
   ]
 }

@@ -1,14 +1,28 @@
 import { NextFunction, Request, Response } from "express";
+import { UserService } from "../services";
 
-export const profile = (req: Request, res: Response, next: NextFunction) => {
+export interface AuthenticatedRequest extends Request {
+  user?: number;
+}
+
+export const profile = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
-    // @ts-ignore
-    console.log("auth token: ", req.user);
+    if (!req.user) {
+      res.status(401).json({
+        message: "Invalid login session",
+      });
+      return;
+    }
 
-    res.status(200).json({
-      user: "test",
-    });
+    const user = await UserService.findUserById(req.user);
+
+    res.status(200).json(user);
   } catch (err) {
+    console.log(err);
     next(err);
   }
 };

@@ -45,7 +45,8 @@ export const login: RequestHandler = async (req, res, next) => {
 
     res.cookie(AUTH_COOKIE, access_token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      // secure: process.env.NODE_ENV === "production",
+      secure: false,
       sameSite: "strict",
       maxAge: 3600000,
     });
@@ -58,9 +59,21 @@ export const login: RequestHandler = async (req, res, next) => {
   }
 };
 
+const registerRequestSchema = z.object({
+  name: z.string().min(1, 'Name is required').min(3, 'Name must be at least 3 characters'),
+  email: z.string().email(),
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .regex(/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).+$/, {
+      message:
+        "Password must contain at least one uppercase letter, one number, and one special character.",
+    }),
+});
+
 export const register: RequestHandler = async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { email, password, name } = registerRequestSchema.parse(req.body);
 
     const existingUser = await UserService.findUserByEmail(email);
 

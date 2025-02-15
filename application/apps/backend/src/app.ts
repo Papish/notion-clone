@@ -4,7 +4,7 @@ import helmet from "helmet";
 import dotenv from "dotenv";
 import cors from "cors";
 import { rateLimit } from "express-rate-limit";
-import cookirParser from "cookie-parser";
+import cookieParser from "cookie-parser";
 import apiRoutes from "./routes";
 import { errorHandler } from "./middlewares/errorHandler";
 import swaggerDoc from "./configs/swagger/swagger-output.json";
@@ -18,11 +18,11 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: "",
+    origin: "http://localhost:5173",
   }),
 );
 
-app.use(cookirParser());
+app.use(cookieParser());
 app.use(express.json());
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
