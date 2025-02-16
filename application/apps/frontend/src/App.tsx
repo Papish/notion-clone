@@ -1,13 +1,15 @@
 import { Routes, Route, Link } from "react-router";
-import LoginPage from "./components/login";
-import RegisterPage from "./components/register";
-import DashboardPage from "./components/dashboard";
+import LoginPage from "./components/login/Login";
+import RegisterPage from "./components/register/Register";
+import DashboardPage from "./components/dashboard/Dashboard";
+import { AuthProvider } from "./providers/auth/auth-provider";
+import PrivateRoute from "./components/PrivateRoute";
 
 const Home = () => <div>Home</div>;
 
 const App = () => {
   return (
-    <>
+    <AuthProvider>
       <div>App</div>
       <nav>
         <ul>
@@ -27,11 +29,13 @@ const App = () => {
       </nav>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route element={<PrivateRoute />}>
+          <Route path="/dashboard" element={<DashboardPage />} />
+        </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>
-    </>
+    </AuthProvider>
   );
 };
 

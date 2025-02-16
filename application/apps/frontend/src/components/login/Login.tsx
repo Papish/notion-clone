@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { httpClient } from "../../utils";
+import { useNavigate } from "react-router";
 
 interface LoginForm {
   email: string;
@@ -8,17 +9,21 @@ interface LoginForm {
 }
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState<LoginForm>({
-    email: "",
-    password: "",
+    email: "admin@admin.com",
+    password: "Admin@123",
     remember: false,
   });
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { data } = await httpClient.post("auth/login", form);
-    console.log(data);
+    const { status } = await httpClient.post("auth/login", form);
+    if (status === 200) {
+      navigate("/dashboard");
+    }
   };
 
   return (

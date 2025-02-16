@@ -45,10 +45,9 @@ export const login: RequestHandler = async (req, res, next) => {
 
     res.cookie(AUTH_COOKIE, access_token, {
       httpOnly: true,
-      // secure: process.env.NODE_ENV === "production",
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 3600000,
+      maxAge: 15 * 1000,
     });
 
     res.status(200).json({
@@ -98,7 +97,7 @@ export const register: RequestHandler = async (req, res, next) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 3600000,
+      maxAge: 15 * 1000,
     });
 
     res.status(200).json({
