@@ -1,9 +1,10 @@
-import { RequestHandler } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import bcrypt from "bcryptjs";
 import z from "zod";
-import { createJwtToken } from "../utils";
+import { get } from "lodash";
 import { UserService } from "../services";
 import { AUTH_COOKIE } from "../constants";
+import { createJwtToken } from "../utils";
 
 const loginRequestSchema = z.object({
   email: z.string().email(),
@@ -47,7 +48,7 @@ export const login: RequestHandler = async (req, res, next) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 15 * 1000,
+      maxAge: 60 * 1000,
     });
 
     res.status(200).json({
@@ -97,7 +98,7 @@ export const register: RequestHandler = async (req, res, next) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 15 * 1000,
+      maxAge: 60 * 1000,
     });
 
     res.status(200).json({
@@ -119,6 +120,20 @@ export const logout: RequestHandler = (req, res, next) => {
     res.status(200).json({
       message: "Logged out successfully",
     });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const me = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const sessionId = get(req, "user.userId") as unknown as number;
+    const user = await UserService.findUserById(sessionId);
+    res.status(200).json(user);
   } catch (err) {
     next(err);
   }

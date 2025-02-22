@@ -52,6 +52,12 @@ app.disable("x-powered-by");
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 app.use("/api", apiRoutes);
 
+app.use((req, res, next) => {
+  res.status(404).json({
+    message: "404, Not found",
+  })
+})
+
 app.use(errorHandler);
 
 app.listen(PORT, () => {
