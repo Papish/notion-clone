@@ -1,13 +1,8 @@
-import { NextFunction, RequestHandler, Response, Request } from "express";
+import { RequestHandler } from "express";
 import { AUTH_COOKIE } from "../constants";
 import { AuthVerificationError, verifyJwtToken } from "../utils";
-import {merge} from 'lodash'
 
-export const authenticate: RequestHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const authenticate: RequestHandler = async (req, res, next) => {
   try {
     const token = req.cookies[AUTH_COOKIE];
 
@@ -16,7 +11,7 @@ export const authenticate: RequestHandler = async (
     }
 
     const decodedToken = verifyJwtToken(token);
-    merge(req, { user: decodedToken });
+    req.user = decodedToken;
 
     next();
   } catch (err) {

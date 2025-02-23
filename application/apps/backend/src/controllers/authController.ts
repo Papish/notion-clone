@@ -1,10 +1,9 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
+import { RequestHandler } from "express";
 import bcrypt from "bcryptjs";
 import z from "zod";
-import { get } from "lodash";
 import { UserService } from "../services";
 import { AUTH_COOKIE } from "../constants";
-import { createJwtToken } from "../utils";
+import { AuthVerificationError, createJwtToken } from "../utils";
 
 const loginRequestSchema = z.object({
   email: z.string().email(),
@@ -60,7 +59,10 @@ export const login: RequestHandler = async (req, res, next) => {
 };
 
 const registerRequestSchema = z.object({
-  name: z.string().min(1, 'Name is required').min(3, 'Name must be at least 3 characters'),
+  name: z
+    .string()
+    .min(1, "Name is required")
+    .min(3, "Name must be at least 3 characters"),
   email: z.string().email(),
   password: z
     .string()
@@ -125,14 +127,12 @@ export const logout: RequestHandler = (req, res, next) => {
   }
 };
 
-export const me = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const me: RequestHandler = async (req, res, next) => {
   try {
-    const sessionId = get(req, "user.userId") as unknown as number;
-    const user = await UserService.findUserById(sessionId);
+    if (!req.user) throw new AuthVerificationError();
+
+    const user = await UserService.findUserById(req.user?.userId);
+
     res.status(200).json(user);
   } catch (err) {
     next(err);

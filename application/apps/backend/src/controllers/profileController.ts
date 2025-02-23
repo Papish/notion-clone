@@ -1,15 +1,13 @@
-import { NextFunction, Request, Response } from "express";
+import { RequestHandler } from "express";
 import { UserService } from "../services";
-import { get } from "lodash";
+import { AuthVerificationError } from "../utils";
 
-export const profile = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const profile: RequestHandler = async (req, res, next) => {
   try {
-    const sessionId = get(req, "user.userId") as unknown as number;
-    const user = await UserService.findUserById(sessionId);
+    if (!req.user) throw new AuthVerificationError();
+
+    const user = await UserService.findUserById(req.user.userId);
+    
     res.status(200).json(user);
   } catch (err) {
     next(err);

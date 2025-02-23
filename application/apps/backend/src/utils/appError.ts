@@ -1,4 +1,9 @@
-// For all auth and jwt related error
+/**
+ * For all auth and jwt related error
+ * 
+ * @class AuthVerificationError
+ * @extends {Error}
+ */
 export class AuthVerificationError extends Error {
   constructor(
     public statusCode: number = 401,
