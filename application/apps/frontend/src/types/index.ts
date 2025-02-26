@@ -5,3 +5,8 @@ export type User = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type UserLoginPayload = {
+  email: string;
+  password: string;
+};

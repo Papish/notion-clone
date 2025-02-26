@@ -1,9 +1,10 @@
 import { createContext, useContext } from "react";
-import { User } from "../../types";
+import { User, UserLoginPayload } from "../../types";
 
 type AuthUser = {
   user: User | null;
-  login: (payload: User) => void;
+  loadingUser: boolean;
+  login: (payload: UserLoginPayload) => void;
   logout: () => void;
 };
 

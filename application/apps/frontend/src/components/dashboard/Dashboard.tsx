@@ -4,7 +4,7 @@ const DashboardPage = () => {
   const { user, logout } = useAuthContext();
 
   return (
-    <div>
+    <div className="mt-10">
       DashboardPage {user?.name}{" "}
       <button onClick={() => logout()}>Logout</button>
     </div>

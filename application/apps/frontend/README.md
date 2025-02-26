@@ -1,4 +1,11 @@
-# Node (What actions can be done on each node)
+# Authentication
 
-1. User can press enter and add a new node
-2. User can keep pressing back space and when no more letter are found, it gets deleted
+1. Instead of using component like PrivateRoute to protect pages. You can also create a HOC function
+
+```
+const ProfilePage = () => <div>Profile Page</div>
+
+export default withAuthenticationRequired(Profile, {
+    onRedirecting: () => <Loading />,
+});
+```

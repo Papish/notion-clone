@@ -1,72 +1,73 @@
-import { useState } from "react";
-import { httpClient } from "../../utils";
-import { useNavigate } from "react-router";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { useAuthContext } from "@/providers";
 
-interface LoginForm {
-  email: string;
-  password: string;
-  remember: boolean;
-}
+const formSchema = z.object({
+  email: z.string().email("Email is required"),
+  password: z.string().min(1, "Password is required"),
+});
 
 const LoginPage = () => {
-  const navigate = useNavigate();
+  const authContext = useAuthContext();
 
-  const [form, setForm] = useState<LoginForm>({
-    email: "admin@admin.com",
-    password: "Admin@123",
-    remember: false,
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "admin@admin.com",
+      password: "Admin@123",
+    },
   });
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const { status } = await httpClient.post("auth/login", form);
-    if (status === 200) {
-      navigate("/dashboard");
-    }
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    authContext.login(values);
   };
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            name="email"
-            type="text"
-            value={form.email}
-            onChange={(e) =>
-              setForm((prev) => ({ ...prev, email: e.target.value }))
-            }
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            value={form.password}
-            onChange={(e) =>
-              setForm((prev) => ({ ...prev, password: e.target.value }))
-            }
-          />
-        </div>
-        <div>
-          <input
-            type="checkbox"
-            checked={form.remember}
-            onChange={(e) =>
-              setForm((prev) => ({ ...prev, remember: e.target.checked }))
-            }
-          />
-          Remember Me
-        </div>
-        <div>
-          <button type="submit">Login</button>
-        </div>
-      </form>
+    <div className="border rounded-md p-4 mt-10 shadow max-w-2xl mx-auto">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="space-y-3">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Email" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit">Login</Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 };
