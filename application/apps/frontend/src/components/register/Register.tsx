@@ -34,7 +34,10 @@ const RegisterPage = () => {
             type="text"
             value={form.name}
             onChange={(e) =>
-              setForm((prev) => ({ ...prev, name: e.target.value }))
+              setForm((prev) => ({
+                ...prev,
+                name: e.target.value,
+              }))
             }
           />
         </div>
@@ -46,7 +49,10 @@ const RegisterPage = () => {
             type="text"
             value={form.email}
             onChange={(e) =>
-              setForm((prev) => ({ ...prev, email: e.target.value }))
+              setForm((prev) => ({
+                ...prev,
+                email: e.target.value,
+              }))
             }
           />
         </div>
@@ -58,7 +64,10 @@ const RegisterPage = () => {
             type="password"
             value={form.password}
             onChange={(e) =>
-              setForm((prev) => ({ ...prev, password: e.target.value }))
+              setForm((prev) => ({
+                ...prev,
+                password: e.target.value,
+              }))
             }
           />
         </div>
@@ -70,7 +79,10 @@ const RegisterPage = () => {
             type="password"
             value={form.repassword}
             onChange={(e) =>
-              setForm((prev) => ({ ...prev, repassword: e.target.value }))
+              setForm((prev) => ({
+                ...prev,
+                repassword: e.target.value,
+              }))
             }
           />
         </div>
