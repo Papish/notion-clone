@@ -26,7 +26,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       await httpClient.post("/auth/logout");
       navigate("/login");
     } catch (err) {
-      console.log(err);
+      const { message } = err as Error;
+      logger({ type: "error", message });
     } finally {
       setUser(null);
       setIsAuthenticated(false);

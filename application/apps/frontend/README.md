@@ -9,3 +9,5 @@ export default withAuthenticationRequired(Profile, {
     onRedirecting: () => <Loading />,
 });
 ```
+
+2. Use cookie to store active session user data instead of local/session storage for better security
