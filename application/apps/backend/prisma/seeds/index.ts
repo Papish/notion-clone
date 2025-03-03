@@ -22,10 +22,28 @@ async function main() {
     create: {
       email: "admin@admin.com",
       password: hashPassword,
-      name: "Admin Admin",
     },
   });
-	console.log(user)
+
+  const profile = await prisma.profile.create({
+    data: {
+      address: "Texas, Navada",
+      avatar: "",
+      bio: "Hey there!",
+      firstName: "John",
+      lastName: "Doe",
+      userId: user.id,
+    },
+  });
+
+  const userDetail = await prisma.user.findUnique({
+    where: {
+      email: "admin@admin.com",
+    },
+    include: { profile: true },
+  });
+
+  console.log(userDetail);
 }
 
 main()

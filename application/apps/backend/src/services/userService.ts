@@ -1,21 +1,32 @@
 import db from "../configs/database";
 
-export const createUser = ({
+export const registerUser = async ({
   email,
   password,
-  name,
+  firstName,
+  lastName,
 }: {
   email: string;
   password: string;
-  name: string;
+  firstName: string;
+  lastName: string;
 }) => {
-  return db.user.create({
+  const user = await db.user.create({
     data: {
       email,
       password,
-      name,
     },
   });
+
+  await db.profile.create({
+    data: {
+      firstName,
+      lastName,
+      userId: user.id,
+    },
+  });
+
+  return user;
 };
 
 export const findUserByEmail = (email: string) => {
@@ -26,14 +37,13 @@ export const findUserByEmail = (email: string) => {
   });
 };
 
-export const findUserById = (id: number) => {
+export const findUserById = (id: string) => {
   return db.user.findUnique({
     where: {
       id,
     },
     select: {
       email: true,
-      name: true,
       role: true,
       createdAt: true,
       updatedAt: true,

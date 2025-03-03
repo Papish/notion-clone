@@ -1,5 +1,5 @@
 export type SessionUser = {
-  userId: number;
+  userId: string;
   email: string;
   name: string;
 };

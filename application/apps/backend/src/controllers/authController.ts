@@ -59,10 +59,14 @@ export const login: RequestHandler = async (req, res, next) => {
 };
 
 const registerRequestSchema = z.object({
-  name: z
+  firstName: z
     .string()
-    .min(1, "Name is required")
-    .min(3, "Name must be at least 3 characters"),
+    .min(1, "First Name is required")
+    .min(3, "First Name must be at least 3 characters"),
+  lastName: z
+    .string()
+    .min(1, "Last Name is required")
+    .min(3, "Last Name must be at least 3 characters"),
   email: z.string().email(),
   password: z
     .string()
@@ -75,7 +79,8 @@ const registerRequestSchema = z.object({
 
 export const register: RequestHandler = async (req, res, next) => {
   try {
-    const { email, password, name } = registerRequestSchema.parse(req.body);
+    const { email, password, firstName, lastName } =
+      registerRequestSchema.parse(req.body);
 
     const existingUser = await UserService.findUserByEmail(email);
 
@@ -88,10 +93,11 @@ export const register: RequestHandler = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await UserService.createUser({
+    const user = await UserService.registerUser({
       email,
       password: hashedPassword,
-      name,
+      firstName,
+      lastName,
     });
 
     const access_token = createJwtToken(user);
@@ -100,7 +106,7 @@ export const register: RequestHandler = async (req, res, next) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 60 * 1000,
+      maxAge: 10 * 1000,
     });
 
     res.status(200).json({
@@ -125,7 +131,7 @@ export const logout: RequestHandler = (req, res, next) => {
   } catch (err) {
     next(err);
   }
-};
+}; 
 
 export const me: RequestHandler = async (req, res, next) => {
   try {

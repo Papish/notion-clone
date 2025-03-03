@@ -1,6 +1,6 @@
 /**
  * For all auth and jwt related error
- * 
+ *
  * @class AuthVerificationError
  * @extends {Error}
  */
