@@ -36,6 +36,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
+    // Checks if user session exist
+    // This is added to as a part to verify if user data is stored actively
+    // if not authenticated is set as false
     const userSession = localStorage.getItem("SESSION");
     if (userSession === null) {
       setIsAuthenticated(false);

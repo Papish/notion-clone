@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { rateLimit } from "express-rate-limit";
 import cookieParser from "cookie-parser";
+import path from "path";
 import apiRoutes from "./routes";
 import { errorHandler } from "./middlewares/errorHandler";
 import swaggerDoc from "./configs/swagger/swagger-output.json";
@@ -24,6 +25,7 @@ app.use(
 
 app.use(cookieParser());
 app.use(express.json());
+app.use("/public", express.static(path.join(__dirname, "../public")));
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).

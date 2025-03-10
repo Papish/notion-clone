@@ -50,3 +50,26 @@ export const findUserById = (id: string) => {
     },
   });
 };
+
+export const updateProfile = async (userId: string, data: {
+  firstName?: string;
+  lastName?: string;
+  bio?: string;
+  address?: string;
+  avatar?: string;
+}) => {
+  return db.profile.update({
+    where: {
+      userId,
+    },
+    data,
+  });
+};
+
+export const findProfileByUserId = (userId: string) => {
+  return db.profile.findUnique({
+    where: {
+      userId,
+    },
+  });
+};

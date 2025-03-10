@@ -47,11 +47,11 @@ export const login: RequestHandler = async (req, res, next) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 10 * 1000,
+      maxAge: 600 * 1000,
     });
 
     res.status(200).json({
-      message: "Login successful",
+      message: "Logged in successfully",
     });
   } catch (err) {
     next(err);
@@ -106,7 +106,7 @@ export const register: RequestHandler = async (req, res, next) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 10 * 1000,
+      maxAge: 600 * 1000,
     });
 
     res.status(200).json({
@@ -131,7 +131,7 @@ export const logout: RequestHandler = (req, res, next) => {
   } catch (err) {
     next(err);
   }
-}; 
+};
 
 export const me: RequestHandler = async (req, res, next) => {
   try {
